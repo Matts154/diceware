@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Diceware</title>
+    </head>
+    <body>
+        <main id="root">
+            <textarea id="wordlists" placeholder="test, eff"></textarea>
+            <button onclick="generateWords()" />Submit</button>
+            <ul id="list">                
+            </ul>
+        </main>
+        <script>
+            function generateWords() {
+                var input = document.getElementById("wordlists")
+                    .value
+                    .replace(' ', '')
+                    .split(",");
+
+                Promise.resolve(getWordlists(input))
+                    .then(data => new Array().concat(...data))
+                    .then(data => shuffleArray(data))
+                    .then(data => {
+                        var uIntNumbers = getRandomNumbers(4);
+                        var numbers = Array.prototype.slice.call(uIntNumbers);
+                        return numbers.map(n => {
+                            n = n % data.length;
+                            return data[n];
+                        })
+                    })
+                    .then(result => result.join(" "))
+                    .then(result => appendPassphrase(result))
+                    .catch(err => console.log(err))
+            }
+
+            function getWordlists(names) {
+                return Promise.all(names.map(name => getWordlist(name)))
+            }
+
+            function getWordlist(name) {
+                var options = {
+                    method: 'GET',
+                    cors: 'no-cors'
+                };
+
+                return fetch(`http://localhost:8080/wordlist/${name}`, options)
+                    .then(data => data.json())
+                    .catch(err => console.error(err.message))
+            }
+
+            function shuffleArray(arr) {
+                // https://rosettacode.org/wiki/Sorting_algorithms/Bogosort#JavaScript
+                for(var j, x, i = arr.length; i; j = Math.floor(Math.random() * i), x = arr[--i], arr[i] = arr[j], arr[j] = x);
+                return arr;
+            }
+
+            function getRandomNumbers(length) {
+                var numbers;
+                
+                if (typeof(crypto) !== "undefined") {
+                    numbers = new Uint32Array(length);
+                    crypto.getRandomValues(numbers);
+                } else {
+                    numbers = new Array(length)
+                    for(var i = 0; i < length; i++) {
+                        numbers[i] = Math.floor(Math.random() * 1000000)
+                    }
+                }
+
+                return numbers;
+            }
+
+            function appendPassphrase(phrase) {
+                var phraseList = document.getElementById("list");
+                var newItem = document.createElement("li")
+
+                newItem.innerHTML = phrase;
+
+                phraseList.appendChild(newItem);
+            }
+        </script>
+    </body>
+</html>
