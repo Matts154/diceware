@@ -7,7 +7,7 @@ const SERVER = {
     PORT: process.env.PORT || 8080,
 };
 
-// Log incoming request
+// Log incoming requests
 app.use(function (req, res, next) {
     var date = new Date();
     console.log('%s: FROM %s TO %s %s', date.toLocaleString(), req.ip, req.method, req.path);
