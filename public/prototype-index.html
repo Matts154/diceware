@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Diceware</title>
+    </head>
+    <style>
+        #phrase {
+            text-transform: lowercase;
+            list-style: none;
+        }
+    </style>
+    <body>
+        <main id="root">
+            <textarea id="wordlists" placeholder="test, eff"></textarea>
+            <br />
+            <button onclick="generateWords(1)" />1</button>
+            <button onclick="generateWords(2)" />2</button>
+            <button onclick="generateWords(3)" />3</button>
+            <button onclick="generateWords(4)" />4</button>
+            <button onclick="generateWords(5)" />5</button>
+            <button onclick="generateWords(6)" />6</button>
+            <p>Number of possible passphrases: <b id="possible-phrases"></b></p>
+            <div id="phrase"></div>
+        </main>
+        <script>
+            function generateWords(numWords) {
+                var rawInput = document.getElementById("wordlists").value;
+                var selectedWordlists = rawInput
+                    .replace(' ', '')
+                    .split(',')
+                    .filter(word => word !== "");
+                    
+                if (!rawInput || selectedWordlists.length === 0) return;
+
+                Promise.resolve(getWordlists(selectedWordlists))
+                    .then(data => new Array().concat(...data))
+                    .then(data => shuffleArray(data))
+                    .then(data => { console.log("Shuffled", data); return data; })
+                    .then(data => { updatePhraseNumber(data.length, numWords); return data; })
+                    .then(data => {
+                        var uIntNumbers = getRandomNumbers(numWords);
+                        var numbers = Array.prototype.slice.call(uIntNumbers);
+                        return numbers.map(n => {
+                            n = n % data.length;
+                            return data[n];
+                        })
+                    })
+                    .then(result => result.join(" "))
+                    .then(result => updatePassphrase(result))
+                    .catch(err => console.log(err));
+            }
+
+            function getWordlists(names) {
+                return Promise.all(names.map(name => getWordlist(name)))
+            }
+
+            function getWordlist(name) {
+                var options = {
+                    method: 'GET',
+                    cors: 'no-cors'
+                };
+
+                return fetch(`http://localhost:8080/wordlist/${name}`, options)
+                    .then(data => data.json())
+                    .catch(err => console.error(err.message))
+            }
+
+            function shuffleArray(arr) {
+                // https://rosettacode.org/wiki/Sorting_algorithms/Bogosort#JavaScript
+                for(var j, x, i = arr.length; i; j = Math.floor(Math.random() * i), x = arr[--i], arr[i] = arr[j], arr[j] = x);
+                return arr;
+            }
+
+            function getRandomNumbers(length) {
+                var numbers;
+                
+                if (typeof(crypto) !== "undefined") {
+                    numbers = new Uint32Array(length);
+                    crypto.getRandomValues(numbers);
+                } else {
+                    numbers = new Array(length)
+                    for(var i = 0; i < length; i++) {
+                        numbers[i] = Math.floor(Math.random() * 1000000)
+                    }
+                }
+
+                return numbers;
+            }
+
+            function updatePassphrase(phrase) {
+                var phraseElement = document.getElementById("phrase");
+                phraseElement.innerText = phrase;
+            }
+
+            function updatePhraseNumber(arrLength, numWords) {
+                var element = document.getElementById("possible-phrases");
+                element.innerText = Math.pow(arrLength, numWords).toLocaleString();
+            }
+        </script>
+    </body>
+</html>

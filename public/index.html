@@ -1,83 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="diceware">
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Diceware</title>
+        <link rel="stylesheet" href="./css/styles.css">
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
-    <body>
-        <main id="root">
-            <textarea id="wordlists" placeholder="test, eff"></textarea>
-            <button onclick="generateWords()" />Submit</button>
-            <ul id="list">                
-            </ul>
-        </main>
-        <script>
-            function generateWords() {
-                var input = document.getElementById("wordlists")
-                    .value
-                    .replace(' ', '')
-                    .split(",");
+    <body layout="column" layout-align="start center">
 
-                Promise.resolve(getWordlists(input))
-                    .then(data => new Array().concat(...data))
-                    .then(data => shuffleArray(data))
-                    .then(data => {
-                        var uIntNumbers = getRandomNumbers(4);
-                        var numbers = Array.prototype.slice.call(uIntNumbers);
-                        return numbers.map(n => {
-                            n = n % data.length;
-                            return data[n];
-                        })
-                    })
-                    .then(result => result.join(" "))
-                    .then(result => appendPassphrase(result))
-                    .catch(err => console.log(err))
-            }
+        <!-- The business. Root of the app. -->
+        <root ng-cloak></root>
 
-            function getWordlists(names) {
-                return Promise.all(names.map(name => getWordlist(name)))
-            }
+        <!-- Angular Material requires Angular.js Libraries -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
 
-            function getWordlist(name) {
-                var options = {
-                    method: 'GET',
-                    cors: 'no-cors'
-                };
-
-                return fetch(`http://localhost:8080/wordlist/${name}`, options)
-                    .then(data => data.json())
-                    .catch(err => console.error(err.message))
-            }
-
-            function shuffleArray(arr) {
-                // https://rosettacode.org/wiki/Sorting_algorithms/Bogosort#JavaScript
-                for(var j, x, i = arr.length; i; j = Math.floor(Math.random() * i), x = arr[--i], arr[i] = arr[j], arr[j] = x);
-                return arr;
-            }
-
-            function getRandomNumbers(length) {
-                var numbers;
-                
-                if (typeof(crypto) !== "undefined") {
-                    numbers = new Uint32Array(length);
-                    crypto.getRandomValues(numbers);
-                } else {
-                    numbers = new Array(length)
-                    for(var i = 0; i < length; i++) {
-                        numbers[i] = Math.floor(Math.random() * 1000000)
-                    }
-                }
-
-                return numbers;
-            }
-
-            function appendPassphrase(phrase) {
-                var phraseList = document.getElementById("list");
-                var newItem = document.createElement("li")
-
-                newItem.innerHTML = phrase;
-
-                phraseList.appendChild(newItem);
-            }
-        </script>
+        <!-- Angular Material library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+        
+        <!-- Diceware app components -->
+        <script src="ng/generate-stuff.js"></script>
+        <script src="ng/app.js"></script>
+        <!-- <script src="ng/api.config.js"></script> -->
+        <script src="ng/wordlist.service.js"></script>
+        <script src="ng/root.component.js"></script>
     </body>
 </html>

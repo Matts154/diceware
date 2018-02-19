@@ -1,0 +1,31 @@
+root {
+    padding: 30px;
+}
+
+md-content {
+    width: 600px;
+}
+
+.app-title ~ .md-body-1 {
+    width: 750px;
+}
+
+h1 md-icon {
+    margin-top: 3px;
+    margin-right: 5px;
+    color: red;
+    font-size: inherit !important;
+    vertical-align: top;
+}
+
+.app-title {
+    margin: 0px;
+}
+
+.tagline {
+    text-align: center;
+}
+
+md-content .md-title {
+    margin-bottom: 0px;
+}

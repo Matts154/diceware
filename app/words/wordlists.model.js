@@ -1,23 +1,35 @@
 var Promise = require("bluebird");
 var fs = Promise.promisifyAll(require("fs"));
 
-var WORDLIST_PATH = "./wordlists"
-var wordlists = [
-    { name: "test", path: `${WORDLIST_PATH}/test.txt` },
-    { name: "eff", path: `${WORDLIST_PATH}/eff.txt` },
-    { name: "lotr-elven", path: `${WORDLIST_PATH}/lotr-elven.txt` },
-];
+var WORDLIST_PATH = "./wordlists";
 
-exports.getAll = function () {
-    return wordlists;
-}
+var wordlists = fs
+    .readdirSync(WORDLIST_PATH)
+    .filter(fileName => fileName.indexOf(".txt") > 0)
+    .map(fileName => {
+        return {
+            name: fileName.replace(".txt", ""),
+            // category: fileName.
+            path: `${WORDLIST_PATH}/${fileName}`
+        };
+    });
 
-exports.get = function (name) {
-    var wordlist, filteredList = wordlists.filter(list => list.name == name);
+exports.getAll = function() {
+    return wordlists.map(wordlist => wordlist.name);
+};
 
-    if (filteredList.length === 0) { return Promise.reject("Invalid wordlist name"); }
-    else { wordlist = filteredList[0]; }
+exports.get = function(name) {
+    var wordlist,
+        filteredList = wordlists.filter(list => list.name == name);
 
-    return fs.readFileAsync(wordlist.path, 'utf8')
-        .then(data => data.split("\r\n"));
-}
+    if (filteredList.length === 0) {
+        return Promise.reject("Invalid wordlist name");
+    } else {
+        wordlist = filteredList[0];
+    }
+
+    return fs
+        .readFileAsync(wordlist.path, "utf8")
+        .then(data => data.split("\n"))
+        .catch(err => Promise.reject(err));
+};
