@@ -14,7 +14,7 @@ app.factory("wordlistService", [
             var hostname = "wordlist-server.herokuapp.com";
             var port = 80;
             var params = {
-                url: `https://${hostname}:${port}/${path}`,
+                url: `https://${hostname}/${path}`,
                 method: method,
                 cors: "no-cors"
             };
