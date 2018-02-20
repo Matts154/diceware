@@ -43,6 +43,14 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
         generateWordlist().then(generatePassphrase);
     };
 
+    $scope.viewWordlists = function() {
+        var title = "Available Wordlists";
+        var body = `<ul class='wordlist-list'>${ctrl.wordlists
+            .map(list => `<li>${list.name}</li>`)
+            .join("\n")}</ul>`;
+        showAlert(title, body);
+    };
+
     /**
      * Return the proper object when the append is called.
      */
@@ -61,7 +69,7 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
      */
     function querySearch(query) {
         var results = query
-            ? ctrl.wordlists.filter(createFilterFor(query))
+            ? Object.values(ctrl.wordlists).filter(createFilterFor(query))
             : [];
         return results;
     }
@@ -73,7 +81,7 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
         var lowercaseQuery = angular.lowercase(query);
 
         return function filterFn(list) {
-            return list.indexOf(lowercaseQuery) === 0;
+            return angular.lowercase(list.name).indexOf(lowercaseQuery) === 0;
         };
     }
 
@@ -131,8 +139,8 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
 
     function generateWordlist() {
         ctrl.wordlist = [];
-        return wordlistService
-            .getWordlists(ctrl.selectedLists)
+        return Promise.resolve(ctrl.selectedLists.map(list => list.id))
+            .then(lists => wordlistService.getWordlists(lists))
             .then(data => shuffleArray(data))
             .then(data => (ctrl.wordlist = data))
             .catch(err => {
@@ -158,9 +166,9 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
         var dialogConfig = $mdDialog
             .confirm()
             // .clickOutsideToClose(true)
-            .hasBackdrop(false)
+            .hasBackdrop(false) // Off due to flashing
             .title(title)
-            .textContent(message)
+            .htmlContent(message)
             .ok("Got it!")
             .cancel("Reroll");
 
@@ -170,10 +178,10 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
     function showAlert(title, message) {
         var dialogConfig = $mdDialog
             .alert()
-            // .clickOutsideToClose(true)
-            .hasBackdrop(false)
+            .clickOutsideToClose(true)
+            .hasBackdrop(false) // Off due to flashing
             .title(title)
-            .textContent(message)
+            .htmlContent(message)
             .ok("Got it!");
 
         $mdDialog.show(dialogConfig);

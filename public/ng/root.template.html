@@ -21,18 +21,19 @@
           md-selected-item="$ctrl.selectedItem"
           md-search-text="$ctrl.searchText"
           md-items="item in $ctrl.querySearch($ctrl.searchText)"
-          md-item-text="item"
+          md-item-text="item.name"
           placeholder="Search for a wordlist">
-        <span md-highlight-text="$ctrl.searchText">{{ item }}</span>
+        <span md-highlight-text="$ctrl.searchText">{{ item.name }}</span>
       </md-autocomplete>
       <md-chip-template>
         <span>
-          <strong>{{ $chip }}</strong>
+          <strong>{{ $chip.name }}</strong>
           <!-- <em>({{ $chip.length }} words)</em> -->
         </span>
       </md-chip-template>
     </md-chips>
     <br />
     <md-button ng-click="go()" class="md-raised md-primary" ng-disabled="hasError">GO</md-button>
+    <md-button ng-click="viewWordlists()" class="md-primary" ng-disabled="hasError">VIEW ALL</md-button>
   </md-content>
 </div>

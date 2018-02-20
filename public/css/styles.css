@@ -29,3 +29,16 @@ h1 md-icon {
 md-content .md-title {
     margin-bottom: 0px;
 }
+
+.wordlist-list {
+    max-width: 970px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.wordlist-list li {
+    display: inline-block;
+    width: 150px;
+    padding: 3px 0px;
+}
