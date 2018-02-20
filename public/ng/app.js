@@ -1,1 +1,1 @@
-angular.module("diceware", ["ngMaterial"]);
+angular.module("diceware", ["ngMaterial", "ngSanitize"]);
