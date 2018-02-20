@@ -11,8 +11,8 @@ app.factory("wordlistService", [
         };
 
         function httpFactory(path, method) {
-            var hostname = "localhost";
-            var port = 8080;
+            var hostname = "wordlist-server.herokuapp.com";
+            var port = 80;
             var params = {
                 url: `http://${hostname}:${port}/${path}`,
                 method: method,
