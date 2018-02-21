@@ -11,7 +11,7 @@
     <body layout="column" layout-align="start center">
 
         <!-- The business. Root of the app. -->
-        <root ng-cloak></root>
+        <root></root>
 
         <!-- Angular Material requires Angular.js Libraries -->
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
@@ -28,5 +28,20 @@
         <script src="ng/app.js"></script>
         <script src="ng/wordlist.service.js"></script>
         <script src="ng/root.component.js"></script>
+
+        <!-- Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
+        <script>
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyDSelQSEX3TtfV_AV98xz30WBlMqOCoXAM",
+                authDomain: "diceware-a118b.firebaseapp.com",
+                databaseURL: "https://diceware-a118b.firebaseio.com",
+                projectId: "diceware-a118b",
+                storageBucket: "",
+                messagingSenderId: "526167293329"
+            };
+            firebase.initializeApp(config);
+        </script>
     </body>
 </html>
