@@ -29,9 +29,7 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
             .getAvailableWordlists()
             .then(res => (ctrl.wordlists = res))
             .then(() => ($scope.hasError = false))
-            .catch(err =>
-                showAlert("Error", `${err.statusText || "Connection refused"}`)
-            );
+            .catch(err => showAlert("Error", getErrorMessage(err.status)));
     };
 
     $scope.go = function() {
@@ -145,7 +143,7 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
             .then(data => (ctrl.wordlist = data))
             .catch(err => {
                 $scope.hasError = true;
-                showAlert("Error", err.message || "Connection refused");
+                showAlert("Error", err.message || "An error occurred.");
             });
     }
 
@@ -185,5 +183,18 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
             .ok("Got it!");
 
         $mdDialog.show(dialogConfig);
+    }
+
+    function getErrorMessage(status) {
+        switch (status) {
+            case -1:
+                return "The wordlist server is offline. Try again later.";
+            case 400:
+                return "Invalid wordlist. Try again.";
+            case 500:
+                return "An error occurred while retreiving your wordlists. Try again later.";
+            default:
+                return "A new error occurred.";
+        }
     }
 }

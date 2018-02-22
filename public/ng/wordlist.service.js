@@ -23,9 +23,10 @@ app.factory("wordlistService", [
                 if (response.status === 200) {
                     return Promise.resolve(response);
                 } else {
-                    return Promise.reject(
-                        `Status ${response.status}: ${response.statusText}`
-                    );
+                    return Promise.reject({
+                        status: response.status,
+                        statusText: response.statusText
+                    });
                 }
             }
 
