@@ -60,7 +60,7 @@
                     cors: 'no-cors'
                 };
 
-                return fetch(`http://localhost:8080/wordlist/${name}`, options)
+                return fetch(`https://wordlist-server.herokuapp.com/wordlist/${name}`, options)
                     .then(data => data.json())
                     .catch(err => console.error(err.message))
             }
