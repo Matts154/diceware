@@ -42,3 +42,7 @@ md-content .md-title {
     width: 150px;
     padding: 3px 0px;
 }
+
+.fa.md-primary {
+    color: rgb(58, 74, 172);
+}

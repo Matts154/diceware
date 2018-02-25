@@ -7,8 +7,8 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
     var ctrl = this;
 
     // App variables
-    $scope.loading = false;
-    $scope.hasError = true;
+    $scope.loading = true;
+    $scope.hasError = false;
 
     // Diceware variables
     ctrl.wordlist = [];
@@ -25,11 +25,13 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
     ctrl.transformChip = transformChip;
 
     ctrl.$onInit = function() {
+        $scope.loading = true;
         wordlistService
             .getAvailableWordlists()
             .then(res => (ctrl.wordlists = res))
-            .then(() => ($scope.hasError = false))
-            .catch(err => showAlert("Error", getErrorMessage(err.status)));
+            .then(() => ($scope.loading = false))
+            .catch(err => showAlert("Error", getErrorMessage(err.status)))
+            .then(() => ($scope.loading = false));
     };
 
     $scope.go = function() {
@@ -38,7 +40,11 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
             return;
         }
 
-        generateWordlist().then(generatePassphrase);
+        $scope.loading = true;
+
+        generateWordlist()
+            .then(generatePassphrase)
+            .then(() => ($scope.loading = false));
     };
 
     $scope.viewWordlists = function() {
@@ -46,6 +52,13 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
         var body = `<ul class='wordlist-list'>${ctrl.wordlists
             .map(list => `<li>${list.name}</li>`)
             .join("\n")}</ul>`;
+        showAlert(title, body);
+    };
+
+    $scope.showHelp = function() {
+        var title = "Help";
+        var body = `These are categories of words used to generate your passphrase.<br />
+            Choose some things that you like!`;
         showAlert(title, body);
     };
 
@@ -142,7 +155,7 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
             .then(data => shuffleArray(data))
             .then(data => (ctrl.wordlist = data))
             .catch(err => {
-                $scope.hasError = true;
+                $scope.loading = false;
                 showAlert("Error", err.message || "An error occurred.");
             });
     }

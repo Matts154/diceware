@@ -13,7 +13,11 @@
       max="7"
       aria-label="words">
     </md-slider>
-    <h4 class="md-title">Wordlists</h4>
+    <h4 class="md-title">
+      Wordlists
+      <i class="fa fa-question-circle fa-1 md-primary"
+        ng-click="showHelp('These are categories of words used to generate your passphrase.')"></i>
+    </h4>
     <md-chips ng-model="$ctrl.selectedLists" md-autocomplete-snap
               md-require-match="$ctrl.autocompleteRequireMatch">
       <md-autocomplete
@@ -33,7 +37,7 @@
       </md-chip-template>
     </md-chips>
     <br />
-    <md-button ng-click="go()" class="md-raised md-primary" ng-disabled="hasError">GO</md-button>
+    <md-button ng-click="go()" class="md-raised md-primary" ng-disabled="hasError || loading">GO</md-button>
     <md-button ng-click="viewWordlists()" class="md-primary" ng-disabled="hasError">VIEW ALL</md-button>
   </md-content>
 </div>
