@@ -1,43 +1,43 @@
 <div layout="column" layout-align="start center">
-  <h1 class="app-title md-display-1"><md-icon>casino</md-icon> Diceware</h1>
-  <p class="md-body-1 tagline">Diceware is a method for creating passphrases, passwords, and other cryptographic variables using ordinary dice as a hardware random number generator. This doesn't use dice.</p>
-  <md-content class="md-padding md-whiteframe-3dp">
-    <h4 class="md-title">Number of words</h4>
-    <md-slider
-      class="md-primary"
-      ng-model="numWords"
-      ng-disabled="hasError"
-      md-discrete
-      step="1"
-      min="2"
-      max="7"
-      aria-label="words">
-    </md-slider>
-    <h4 class="md-title">
-      Wordlists
-      <i class="fa fa-question-circle fa-1 md-primary"
-        ng-click="showHelp('These are categories of words used to generate your passphrase.')"></i>
-    </h4>
-    <md-chips ng-model="$ctrl.selectedLists" md-autocomplete-snap
-              md-require-match="$ctrl.autocompleteRequireMatch">
-      <md-autocomplete
-          ng-disabled="hasError"
-          md-selected-item="$ctrl.selectedItem"
-          md-search-text="$ctrl.searchText"
-          md-items="item in $ctrl.querySearch($ctrl.searchText)"
-          md-item-text="item.name"
-          placeholder="Search for a wordlist">
-        <span md-highlight-text="$ctrl.searchText">{{ item.name }}</span>
-      </md-autocomplete>
-      <md-chip-template>
-        <span>
-          <strong>{{ $chip.name }}</strong>
-          <!-- <em>({{ $chip.length }} words)</em> -->
-        </span>
-      </md-chip-template>
-    </md-chips>
-    <br />
-    <md-button ng-click="go()" class="md-raised md-primary" ng-disabled="hasError || loading">GO</md-button>
-    <md-button ng-click="viewWordlists()" class="md-primary" ng-disabled="hasError">VIEW ALL</md-button>
-  </md-content>
+	<h1 class="app-title md-display-1"><md-icon>casino</md-icon> Diceware</h1>
+	<p class="md-body-1 tagline">Diceware is a method for creating passphrases, passwords, and other cryptographic variables using ordinary dice as a hardware random number generator. This doesn't use dice.</p>
+	<md-content class="md-padding md-whiteframe-3dp">
+		<h4 class="md-title">Number of words</h4>
+		<md-slider
+			class="md-primary"
+			ng-model="numWords"
+			ng-disabled="hasError"
+			md-discrete
+			step="1"
+			min="2"
+			max="7"
+			aria-label="words">
+		</md-slider>
+		<h4 class="md-title">
+			Wordlists
+			<i class="fa fa-question-circle fa-1 md-primary"
+				ng-click="showHelp('These are categories of words used to generate your passphrase.')"></i>
+		</h4>
+		<md-chips ng-model="$ctrl.selectedLists" md-autocomplete-snap
+							md-require-match="$ctrl.autocompleteRequireMatch">
+			<md-autocomplete
+					ng-disabled="hasError"
+					md-selected-item="$ctrl.selectedItem"
+					md-search-text="$ctrl.searchText"
+					md-items="item in $ctrl.querySearch($ctrl.searchText)"
+					md-item-text="item.name"
+					placeholder="Search for a wordlist">
+				<span md-highlight-text="$ctrl.searchText">{{ item.name }}</span>
+			</md-autocomplete>
+			<md-chip-template>
+				<span>
+					<strong>{{ $chip.name }}</strong>
+					<!-- <em>({{ $chip.length }} words)</em> -->
+				</span>
+			</md-chip-template>
+		</md-chips>
+		<br />
+		<md-button ng-click="go()" class="md-raised md-primary" ng-disabled="hasError || loading">GO</md-button>
+		<md-button ng-click="viewWordlists()" class="md-primary" ng-disabled="hasError">VIEW ALL</md-button>
+	</md-content>
 </div>

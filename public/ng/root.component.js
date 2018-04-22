@@ -3,7 +3,7 @@ angular.module("diceware").component("root", {
     controller: rootController
 });
 
-function rootController($scope, $mdToast, $mdDialog, wordlistService) {
+function rootController($scope, $q, $mdToast, $mdDialog, wordlistService) {
     var ctrl = this;
 
     // App variables
@@ -49,9 +49,9 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
 
     $scope.viewWordlists = function() {
         var title = "Available Wordlists";
-        var body = `<ul class='wordlist-list'>${ctrl.wordlists
-            .map(list => `<li>${list.name}</li>`)
-            .join("\n")}</ul>`;
+        var body = `<ul class='wordlist-list'>
+            ${ctrl.wordlists.map(list => `<li>${list.name}</li>`).join("\n")}
+        </ul>`;
         showAlert(title, body);
     };
 
@@ -135,7 +135,8 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
             return;
         }
 
-        return Promise.resolve(ctrl.wordlist)
+        return $q
+            .resolve(ctrl.wordlist)
             .then(data => {
                 var uIntNumbers = getRandomNumbers($scope.numWords);
                 var numbers = Array.prototype.slice.call(uIntNumbers);
@@ -150,7 +151,8 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
 
     function generateWordlist() {
         ctrl.wordlist = [];
-        return Promise.resolve(ctrl.selectedLists.map(list => list.id))
+        return $q
+            .resolve(ctrl.selectedLists.map(list => list.id))
             .then(lists => wordlistService.getWordlists(lists))
             .then(data => shuffleArray(data))
             .then(data => (ctrl.wordlist = data))
@@ -183,7 +185,9 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
             .ok("Got it!")
             .cancel("Reroll");
 
-        $mdDialog.show(dialogConfig).then(function() {}, generatePassphrase);
+        return $mdDialog
+            .show(dialogConfig)
+            .then(function() {}, generatePassphrase);
     }
 
     function showAlert(title, message) {
@@ -195,7 +199,7 @@ function rootController($scope, $mdToast, $mdDialog, wordlistService) {
             .htmlContent(message)
             .ok("Got it!");
 
-        $mdDialog.show(dialogConfig);
+        return $mdDialog.show(dialogConfig);
     }
 
     function getErrorMessage(status) {
