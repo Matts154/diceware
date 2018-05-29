@@ -1,9 +1,9 @@
 var app = angular.module("diceware");
 
 app.factory("wordlistService", [
-    "$log",
+    "$q",
     "$http",
-    function($log, $http) {
+    function($q, $http) {
         var service = {};
         var METHOD = {
             GET: "GET",
@@ -21,9 +21,9 @@ app.factory("wordlistService", [
 
             function checkStatus(response) {
                 if (response.status === 200) {
-                    return Promise.resolve(response);
+                    return $q.resolve(response);
                 } else {
-                    return Promise.reject({
+                    return $q.reject({
                         status: response.status,
                         statusText: response.statusText
                     });
@@ -40,9 +40,9 @@ app.factory("wordlistService", [
         };
 
         service.getWordlists = function(arr) {
-            return Promise.all(arr.map(name => this.getWordlist(name))).then(
-                data => new Array().concat(...data)
-            );
+            return $q
+                .all(arr.map(name => this.getWordlist(name)))
+                .then(data => new Array().concat(...data));
         };
 
         service.getWordlist = function(name) {
