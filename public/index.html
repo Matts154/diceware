@@ -32,20 +32,27 @@
 
         <!-- Angular Material library -->
         <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+        <!-- Angularfire for Firebase -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angularFire/2.3.0/angularfire.min.js" integrity="sha256-2seziVLjHAKVYTBbBsADQgiq+t/8waq22FkWKynG3Tk=" crossorigin="anonymous"></script>
         
         <!-- Diceware app components -->
         <script src="ng/app.js"></script>
         <script src="ng/wordlist.service.js"></script>
         <script src="ng/root.component.js"></script>
 
-        <!-- Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-104075913-2"></script>
+        <!-- Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
         <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'UA-104075913-2');
+          var config = {
+            apiKey: "AIzaSyDczRxQXVV2-Svfkkv4oinAbIxSoJdX-_g",
+            authDomain: "diceware-6b2a8.firebaseapp.com",
+            databaseURL: "https://diceware-6b2a8.firebaseio.com",
+            projectId: "diceware-6b2a8",
+            storageBucket: "diceware-6b2a8.appspot.com",
+            messagingSenderId: "630077915213"
+          };
+          firebase.initializeApp(config);
         </script>
 
         <!-- Enable Javascript plzkthx -->
