@@ -46,3 +46,8 @@ md-content .md-title {
 .fa.md-primary {
     color: rgb(58, 74, 172);
 }
+
+md-content.md-whiteframe-3dp md-slider {
+    margin-left: 10px;
+    margin-right: 10px;
+}
